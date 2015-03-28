@@ -3,7 +3,7 @@ require 'sunlight/congress'
 require 'erb'
 require 'date'
 
-Sunlight::Congress.api_key = "e179a6973728c4dd3fb1204283aaccb5"  #get API key
+Sunlight::Congress.api_key = "e179a6973728c4dd3fb1204283aaccb5"  #access to the API
 
 #METHODS SECTION:
 def clean_zipcode(zipcode)
@@ -13,16 +13,14 @@ end
 def clean_phone_numbers(phone_number)
   numbers = phone_number.scan(/\d+/).join()  #scan for number only
 
-  if numbers.length < 10 && numbers.length > 11
-    numbers = "0000000000"  #make 00.. default for bad phone numbers                     
-  elsif numbers.length == 10
-    numbers
-  elsif numbers[0] == "1"
-    numbers[1..10]
-  else
-    numbers = "0000000000"
+  if numbers.length != 10
+    if numbers.length == 11 && numbers[0] == '1'
+      numbers[1..10]  #trim down the number
+    else
+      numbers = "0000000000"  #00.. as a default for bad numbers
+    end
   end
-
+  
   numbers[0..2] + '-' + numbers[3..5] + '-' + numbers[6..9]  #formating return 
 end
 
